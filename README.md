@@ -4,19 +4,17 @@
 
 You have learned about binary search trees – where you take a group of data items and turn them into a tree full of nodes where each left node is “lower” than each right node. The tree starts with the “root node” and any node with no children is called a “leaf node”. You have also learned about tree traversal algorithms like breadth-first and depth-first.
 
-Now, let’s take a look at balanced binary search trees (BST). Read this article and watch this video to understand the basic algorithm used to build a balanced BST. Although these two resources do not use Ruby, you should understand it enough to develop your own pseudocode.
-
 ## Assignment
 
 You’ll build a balanced BST in this assignment. Do not use duplicate values because they make it more complicated and result in trees that are much harder to balance. Therefore, be sure to always remove duplicate values or check for an existing value before inserting.
 
 1. Build a <code>Node</code> class. It should have an attribute for the data it stores as well as its left and right children. As a bonus, try including the <code>Comparable</code> module and compare nodes using their data attribute.
 
-2. Build a <code>Tree</code> class which accepts an array when initialized. The <code>Tree</code> class should have a root attribute which uses the return value of #build_tree which you’ll write next.
+2. Build a <code>Tree</code> class which accepts an array when initialized. The <code>Tree</code> class should have a root attribute which uses the return value of <code>#build_tree</code> which you’ll write next.
 
 3. Write a #build_tree method which takes an array of data (e.g. [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]) and turns it into a balanced binary tree full of Node objects appropriately placed (don’t forget to sort and remove duplicates!). The <code>#build_tree</code> method should return the level-0 root node.
 
-4. Write an <code>#insert</code> and <code>#delete</code> method which accepts a value to insert/delete (you’ll have to deal with several cases for delete such as when a node has children or not). If you need additional resources, check out these two articles on inserting and deleting, or this video with several visual examples.
+4. Write an <code>#insert</code> and <code>#delete</code> method which accepts a value to insert/delete (you’ll have to deal with several cases for delete such as when a node has children or not).
 
 5. Write a <code>#find</code> method which accepts a value and returns the node with the given value.
 
