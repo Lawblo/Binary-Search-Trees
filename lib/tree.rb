@@ -8,27 +8,37 @@ class Tree
   attr_accessor(:array, :root)
 
   def initialize(arr = [])
-    @array = arr.sort
+    @array = clean_arr(arr)
     @root = build_tree(arr)
   end
 
   # build binary tree recursively
   def build_tree(arr = array)
     center = mid(arr)
-    return arr if arr.length <= 1
-
     arr_left = left(arr)
     arr_right = right(arr)
-    Node.new(center, build_tree(arr_left), build_tree(arr_right))
+
+    return Node.new(center) if arr_left.empty? && arr_right.empty?
+
+    left = build_tree(arr_left) unless arr_left.empty?
+    right = build_tree(arr_right) unless arr_right.empty?
+    Node.new(center, left, right)
   end
 
   # accepts a value to insert
-  def insert(value)
+  def insert(value= 0, node = root)
+    return puts "#{value} already exists" if node.data == value
+    return node.right = Node.new(value) if node.data < value && node.right.nil?
+    return node.left  = Node.new(value) if node.data > value && node.left.nil?
 
+    insert(value, node.right) if value > node.data
+    insert(value, node.left) if value < node.data
   end
 
   # accepts a value to delete
-  def delete(value); end
+  def delete(value, node = root)
+
+  end
 
   # accepts a value and returns the node with the given value
   def find(value); end
@@ -73,4 +83,10 @@ class Tree
 
   # Rebalances an unbalanced tree
   def rebalance; end
+
+  def pretty_print(node = @root, prefix = '', is_left = true)
+    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
+    puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
+    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+  end
 end

@@ -13,4 +13,8 @@ module ArrayMod
   def right(arr)
     arr[(0 + arr.length - 1) / 2 + 1, arr.length - 1]
   end
+
+  def clean_arr(arr)
+    arr.uniq.sort
+  end
 end
