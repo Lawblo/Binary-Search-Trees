@@ -8,7 +8,7 @@ class Tree
   attr_accessor(:array, :root)
 
   def initialize(arr = [])
-    @array = clean_arr(arr)
+    p @array = clean_arr(arr)
     @root = build_tree(arr)
   end
 
@@ -17,7 +17,6 @@ class Tree
     center = mid(arr)
     arr_left = left(arr)
     arr_right = right(arr)
-
     return Node.new(center) if arr_left.empty? && arr_right.empty?
 
     left = build_tree(arr_left) unless arr_left.empty?
@@ -26,7 +25,7 @@ class Tree
   end
 
   # accepts a value to insert
-  def insert(value= 0, node = root)
+  def insert(value = 0, node = root)
     return puts "#{value} already exists" if node.data == value
     return node.right = Node.new(value) if node.data < value && node.right.nil?
     return node.left  = Node.new(value) if node.data > value && node.left.nil?
@@ -37,7 +36,13 @@ class Tree
 
   # accepts a value to delete
   def delete(value, node = root)
-
+    if value > node.data
+      if node.right.data == value
+        return node.right = nil if node.right.left.empty? && node.right.right.empty?
+        return node.right = node.right.left if node.right.right.empty?
+        return node.right = node.right.right if node.right.left.empty?
+      end
+    end
   end
 
   # accepts a value and returns the node with the given value

@@ -3,11 +3,15 @@
 require_relative 'node'
 require_relative 'tree'
 
-tree = Tree.new([1, 2, 4, 5, 6, 7, 8, 9])
-puts 'BEFORE'
+big = Tree.new([0, 2, 5, 7, 9, 10, 11, 12])
 
-tree.insert(0)
+p big
+big.pretty_print
 
-tree.insert(2)
+big.insert(2)
 
-tree.pretty_print
+big.insert(1)
+
+big.insert(14)
+
+big.pretty_print
