@@ -3,15 +3,10 @@
 require_relative 'node'
 require_relative 'tree'
 
-big = Tree.new([0, 2, 5, 7, 9, 10, 11, 12])
+tree = Tree.new([0, 3, 5, 7, 9, 12, 5, 7])
 
-p big
-big.pretty_print
+# tree = Tree.new(Array.new(15) { rand(1..100) })
 
-big.insert(2)
+tree.pretty_print
 
-big.insert(1)
-
-big.insert(14)
-
-big.pretty_print
+p tree.find(5)

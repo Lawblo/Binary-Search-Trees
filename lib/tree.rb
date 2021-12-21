@@ -8,8 +8,8 @@ class Tree
   attr_accessor(:array, :root)
 
   def initialize(arr = [])
-    p @array = clean_arr(arr)
-    @root = build_tree(arr)
+    @array = clean_arr(arr)
+    @root = build_tree(array)
   end
 
   # build binary tree recursively
@@ -35,23 +35,59 @@ class Tree
   end
 
   # accepts a value to delete
-  def delete(value, node = root)
-    if value > node.data
-      if node.right.data == value
-        return node.right = nil if node.right.left.empty? && node.right.right.empty?
-        return node.right = node.right.left if node.right.right.empty?
-        return node.right = node.right.right if node.right.left.empty?
+  def delete(value, node = root, parent = nil)
+    if node.data == value
+      # Node = nil if match and no children 
+      if node.right.nil? && node.left.nil?
+        node.data > parent.data ? parent.right = nil : parent.left = nil
+        return node.delete
+      
       end
+      # Node = right node if match and no left node
+      return node.replace(node.right) if node.left.nil?
+      
+      # Node = left node if matc and no right node
+      return node.replace(node.left) if node.right.nil?
+      
+      # BOTH CHILDREN EXIST AT THIS POINT
+      # find a home for node.right
+      temp = node.right
+      node.replace(node.left)
+      until node.right.nil?
+        node = node.right
+      end
+      
+      return node.right = temp
+    end
+
+
+    if value > node.data
+      return puts 'node not found' if node.right.nil?
+
+      delete(value, node.right, node) 
+    elsif value < node.data
+      return puts 'node not found' if  node.left.nil?
+
+      delete(value, node.left, node) 
     end
   end
 
   # accepts a value and returns the node with the given value
-  def find(value); end
+  def find(value, node = root)
+    return node if node.data == value
+    return puts 'value not in tree' if value > node.data && node.right.nil?
+    return puts 'value not in tree' if value < node.data && node.left.nil?
+
+    return find(value, node.right) if value > node.data
+    return find(value, node.left) if value < node.data
+  end
 
   # accepts a block. This method should traverse the
   # tree in breadth-first level order and yield each node
   # to the provided block.
-  def level_order_recursive; end
+  def level_order_recursive(node = root)
+    
+  end
 
   # accepts a block. This method should traverse the
   # tree in breadth-first level order and yield each node
