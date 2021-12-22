@@ -20,6 +20,7 @@ class Node
 
   # deletes the node
   def delete
+    puts "#{self} deleted"
     self.data = nil
     self.left = nil
     self.right = nil
@@ -27,6 +28,7 @@ class Node
 
   # replaces the node with the specified node
   def replace(node)
+    puts "replaced #{self} with #{node}"
     self.data = node.data
     self.left = node.left
     self.right = node.right

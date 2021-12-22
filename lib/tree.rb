@@ -26,12 +26,17 @@ class Tree
 
   # accepts a value to insert
   def insert(value = 0, node = root)
-    return puts "#{value} already exists" if node.data == value
-    return node.right = Node.new(value) if node.data < value && node.right.nil?
-    return node.left  = Node.new(value) if node.data > value && node.left.nil?
+    if value > node.data
+      return node.right = Node.new(value) if node.right.nil?
 
-    insert(value, node.right) if value > node.data
-    insert(value, node.left) if value < node.data
+      insert(value, node.right)
+    elsif value < node.data
+      return node.left = Node.new(value) if node.left.nil?
+
+      insert(value, node.left)
+    else
+      puts "#{value} already exists"
+    end
   end
 
   # accepts a value to delete
@@ -41,7 +46,6 @@ class Tree
       if node.right.nil? && node.left.nil?
         node.data > parent.data ? parent.right = nil : parent.left = nil
         return node.delete
-
       end
       # Node = right node if match and no left node
       return node.replace(node.right) if node.left.nil?
@@ -56,37 +60,26 @@ class Tree
       until node.right.nil?
         node = node.right
       end
-
       return node.right = temp
     end
+    return puts 'node not found' if value > node.data && node.right.nil? || value < node.data && node.left.nil?
 
-
-    if value > node.data
-      return puts 'node not found' if node.right.nil?
-
-      delete(value, node.right, node)
-    elsif value < node.data
-      return puts 'node not found' if  node.left.nil?
-
-      delete(value, node.left, node)
-    end
+    value > node.data ? delete(value, node.right, node) : delete(value, node.left, node)
   end
 
   # accepts a value and returns the node with the given value
   def find(value, node = root)
     return node if node.data == value
-    return puts 'value not in tree' if value > node.data && node.right.nil?
-    return puts 'value not in tree' if value < node.data && node.left.nil?
+    return puts 'value not in tree' if value > node.data && node.right.nil? || value < node.data && node.left.nil?
 
-    return find(value, node.right) if value > node.data
-    return find(value, node.left) if value < node.data
+    value > node.data ? find(value, node.right) : find(value, node.left)
   end
 
   # accepts a block. This method should traverse the
   # tree in breadth-first level order and yield each node
   # to the provided block.
   def level_order_recursive(node = root)
-
+    yield node if node == root
   end
 
   # accepts a block. This method should traverse the
