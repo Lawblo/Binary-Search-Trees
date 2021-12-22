@@ -78,14 +78,20 @@ class Tree
   # accepts a block. This method should traverse the
   # tree in breadth-first level order and yield each node
   # to the provided block.
-  def level_order_recursive(node = root)
-    yield node if node == root
+  def level_order_recursive(queue = [root], &block)
+    node = queue.shift
+    yield node
+    queue << node.left unless node.left.nil?
+    queue << node.right unless node.right.nil?
+    level_order_recursive(queue, &block) unless queue.empty?
   end
 
   # accepts a block. This method should traverse the
   # tree in breadth-first level order and yield each node
   # to the provided block.
-  def level_order_iterative; end
+  def level_order_iterative(queue = [root], &block)
+    
+  end
 
   # Accepts a block. Traverse the tree inorder.
   # Yield each node to the provided block.
