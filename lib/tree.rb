@@ -3,6 +3,7 @@
 require_relative 'array_mod'
 
 # building and managing tree of nodes
+# rubocop:disable ClassLength
 class Tree
   include ArrayMod
   attr_accessor(:array, :root)
@@ -89,28 +90,53 @@ class Tree
   # accepts a block. This method should traverse the
   # tree in breadth-first level order and yield each node
   # to the provided block.
-  def level_order_iterative(queue = [root], &block)
-    
+  def level_order_iterative(queue = [root])
+    until queue.empty?
+      node = queue.shift
+      yield node
+      queue << node.left unless node.left.nil?
+      queue << node.right unless node.right.nil?
+    end
   end
 
   # Accepts a block. Traverse the tree inorder.
   # Yield each node to the provided block.
   # The methods should return an array of values if no block is given.
-  def inorder; end
+  def inorder(node = root, &block)
+    inorder(node.left, &block) unless node.left.nil?
+    yield node
+    inorder(node.right, &block) unless node.right.nil?
+  end
 
   # Accepts a block. Traverse the tree preorder.
   # Yield each node to the provided block.
   # The methods should return an array of values if no block is given.
-  def preorder; end
+  def preorder(node = root, &block)
+    yield node
+    preorder(node.left, &block) unless node.left.nil?
+    preorder(node.right, &block) unless node.right.nil?
+  end
 
   # Accepts a block. Traverse the tree postorder.
   # Yield each node to the provided block.
   # The methods should return an array of values if no block is given.
-  def postorder; end
+  def postorder(node = root, &block)
+    postorder(node.left, &block) unless node.left.nil?
+    postorder(node.right, &block) unless node.right.nil?
+    yield node
+  end
 
   # Accepts a node and returns its height.
   # Height is defined as the number of edges in longest path from a given node to a leaf node.
-  def height(node); end
+  def height(node = root, counter = 0, max = 0)
+    if node.left || node.right
+      counter += 1
+      max = height(node.left, counter, max) if node.left
+      max = height(node.right, counter, max) if node.right
+    end
+    max = counter if max < counter
+    max
+  end
 
   # Accepts a node and returns its depth.
   # Depth is defined as the number of edges in path from a given node to the tree’s root node.
@@ -130,3 +156,5 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 end
+
+# rubocop:enable ClassLength
