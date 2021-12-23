@@ -28,11 +28,11 @@ class Tree
   # accepts a value to insert
   def insert(value = 0, node = root)
     if value > node.data
-      return node.right = Node.new(value) if node.right.nil?
+      return node.right = Node.new(value) unless node.right
 
       insert(value, node.right)
     elsif value < node.data
-      return node.left = Node.new(value) if node.left.nil?
+      return node.left = Node.new(value) unless node.left
 
       insert(value, node.left)
     else
@@ -48,19 +48,14 @@ class Tree
         node.data > parent.data ? parent.right = nil : parent.left = nil
         return node.delete
       end
-      # Node = right node if match and no left node
-      return node.replace(node.right) if node.left.nil?
-
-      # Node = left node if matc and no right node
-      return node.replace(node.left) if node.right.nil?
-
+      return node.replace(node.right) unless node.left
+      return node.replace(node.left) unless node.right
+      
       # BOTH CHILDREN EXIST AT THIS POINT
       # find a home for node.right
       temp = node.right
       node.replace(node.left)
-      until node.right.nil?
-        node = node.right
-      end
+      node = node.right until node.right.nil?
       return node.right = temp
     end
     return puts 'node not found' if value > node.data && node.right.nil? || value < node.data && node.left.nil?
@@ -82,8 +77,8 @@ class Tree
   def level_order_recursive(queue = [root], &block)
     node = queue.shift
     yield node
-    queue << node.left unless node.left.nil?
-    queue << node.right unless node.right.nil?
+    queue << node.left if node.left
+    queue << node.right if node.right
     level_order_recursive(queue, &block) unless queue.empty?
   end
 
@@ -94,8 +89,8 @@ class Tree
     until queue.empty?
       node = queue.shift
       yield node
-      queue << node.left unless node.left.nil?
-      queue << node.right unless node.right.nil?
+      queue << node.left if node.left
+      queue << node.right if node.right
     end
   end
 
@@ -103,9 +98,9 @@ class Tree
   # Yield each node to the provided block.
   # The methods should return an array of values if no block is given.
   def inorder(node = root, &block)
-    inorder(node.left, &block) unless node.left.nil?
+    inorder(node.left, &block) if node.left
     yield node
-    inorder(node.right, &block) unless node.right.nil?
+    inorder(node.right, &block) if node.right
   end
 
   # Accepts a block. Traverse the tree preorder.
@@ -113,16 +108,16 @@ class Tree
   # The methods should return an array of values if no block is given.
   def preorder(node = root, &block)
     yield node
-    preorder(node.left, &block) unless node.left.nil?
-    preorder(node.right, &block) unless node.right.nil?
+    preorder(node.left, &block) if node.left
+    preorder(node.right, &block) if node.right
   end
 
   # Accepts a block. Traverse the tree postorder.
   # Yield each node to the provided block.
   # The methods should return an array of values if no block is given.
   def postorder(node = root, &block)
-    postorder(node.left, &block) unless node.left.nil?
-    postorder(node.right, &block) unless node.right.nil?
+    postorder(node.left, &block) if node.left
+    postorder(node.right, &block) if node.right
     yield node
   end
 
@@ -140,7 +135,14 @@ class Tree
 
   # Accepts a node and returns its depth.
   # Depth is defined as the number of edges in path from a given node to the tree’s root node.
-  def depth(node); end
+  def depth(find_node, node = root, counter = 0)
+    return unless find_node
+    return counter if find_node.data == node.data
+
+    counter += 1
+    depth(find_node, node.left, counter) if find_node.data < node.data
+    depth(find_node, node.right, counter) if find_node.data > node.data
+  end
 
   # checks if the tree is balanced.
   # A balanced tree is one where the difference between heights of

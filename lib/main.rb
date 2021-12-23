@@ -7,11 +7,14 @@ require_relative 'tree'
 # tree = Tree.new [1, 2, 3, 4, 5]
 tree = Tree.new(Array.new(35) { rand(1..100) })
 
+tree.pretty_print
+
+
 # tree.insert 3
-# tree.insert(31)
-# tree.delete(12)
+tree.insert(31)
+tree.delete(12)
 # tree.delete(3)
-# p tree.find(7)
+p tree.find(7)
 
 tree.pretty_print
 
@@ -38,3 +41,5 @@ tree.pretty_print
 # p nodes_postorder
 
 puts tree.height
+
+puts tree.depth(tree.find(83))
