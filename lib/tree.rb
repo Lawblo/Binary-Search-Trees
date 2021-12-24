@@ -9,12 +9,12 @@ class Tree
   attr_accessor(:array, :root)
 
   def initialize(arr = [])
-    @array = clean_arr(arr)
-    @root = build_tree(array)
+    @array = arr.uniq.sort
+    @root = build_tree(@array)
   end
 
   # build binary tree recursively
-  def build_tree(arr = array)
+  def build_tree(arr)
     center = mid(arr)
     arr_left = left(arr)
     arr_right = right(arr)
@@ -45,7 +45,7 @@ class Tree
     if node.data == value
       # Node = nil if match and no children
       if node.right.nil? && node.left.nil?
-        node.data > parent.data ? parent.right = nil : parent.left = nil
+        (node.data > parent.data ? parent.right = nil : parent.left = nil) if parent
         return node.delete
       end
       return node.replace(node.right) unless node.left
@@ -124,6 +124,8 @@ class Tree
   # Accepts a node and returns its height.
   # Height is defined as the number of edges in longest path from a given node to a leaf node.
   def height(node = root, counter = 0, max = 0)
+    
+
     if node.left || node.right
       counter += 1
       max = height(node.left, counter, max) if node.left
@@ -147,10 +149,24 @@ class Tree
   # checks if the tree is balanced.
   # A balanced tree is one where the difference between heights of
   # left subtree and right subtree of every node is not more than 1.
-  def balanced?; end
+  def balanced?(node = root)
+    p left_height = height(node.left)
+    p right_height = height(node.right)
+    puts "Node: #{node.data} left height: #{left_height}, right height: #{right_height}"
+    return false if left_height - right_height > 1 || right_height - left_height > 1
+
+    balanced?(node.left) if node.left
+    balanced?(node.right) if node.right
+    true
+  end
 
   # Rebalances an unbalanced tree
-  def rebalance; end
+  def rebalance
+    arr = []
+    inorder { |node| arr << node.data }
+    @array = arr
+    @root = build_tree(array)
+  end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
